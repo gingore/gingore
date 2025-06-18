@@ -1,0 +1,39 @@
+name: 🐑 Update README Neofetch Stats
+
+on:
+  schedule:
+    - cron: "0 6 * * *"  # daily at 6am UTC
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Calculate dynamic data
+        id: get_data
+        run: |
+          #!/bin/bash
+
+          birthdate="2003-07-10"
+          today=$(date +%Y-%m-%d)
+          age=$(($(date -d "$today" +%s) - $(date -d "$birthdate" +%s)))
+          years=$((age / 31556952))
+
+          repos=$(curl -s https://api.github.com/users/lenatran | jq '.public_repos')
+
+          echo "age=$years" >> $GITHUB_OUTPUT
+          echo "repos=$repos" >> $GITHUB_OUTPUT
+
+      - name: Update README
+        run: |
+          sed -i "s/<!--AGE-->.*/<!--AGE-->${{ steps.get_data.outputs.age }}/" README.md
+          sed -i "s/<!--REPOS-->.*/<!--REPOS-->${{ steps.get_data.outputs.repos }}/" README.md
+
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add README.md
+          git commit -m "🔁 update Neofetch stats" || echo "no changes to commit"
+          git push
