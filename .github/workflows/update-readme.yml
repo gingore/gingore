@@ -2,7 +2,7 @@ name: 🐑 Update README Neofetch Stats
 
 on:
   schedule:
-    - cron: "0 6 * * *"  # daily at 6am UTC
+    - cron: "0 6 * * *"
   workflow_dispatch:
 
 jobs:
@@ -19,8 +19,30 @@ jobs:
 
           birthdate="2003-07-10"
           today=$(date +%Y-%m-%d)
-          age=$(($(date -d "$today" +%s) - $(date -d "$birthdate" +%s)))
-          years=$((age / 31556952))
+          
+          formatted_age=$(python3 -c "
+          from datetime import date
+          b = date(2003, 7, 10)
+          t = date.today()
+          delta = t - b
+          
+          days = delta.days
+          
+          y = t.year - b.year
+          m = t.month - b.month
+          d = t.day - b.day
+          if d < 0:
+              m -= 1
+              from calendar import monthrange
+              d += monthrange(t.year, t.month-1)[1]
+          if m < 0:
+              y -= 1
+              m += 12
+          print(f'{y} years, {m} months, {d} days')
+          ")
+          
+          echo "age=$formatted_age" >> $GITHUB_OUTPUT
+
 
           repos=$(curl -s https://api.github.com/users/lenatran | jq '.public_repos')
 
