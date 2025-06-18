@@ -1,7 +1,4 @@
 ## hi there! i'm lena 🐑
-
-```bash
-LenaOS 2003
 -----------
 - devices: macbook pro, iphone
 - uptime: 21 years 11 months
