@@ -1,7 +1,6 @@
-## hi there! i'm lena 🐑
+## hello world! i'm Lena 🐑
 
 - languages: html, css, js, php, mysql
 - tools: figma, procreate
-- location: texas
-- learning: react, APIs
+- learning: react, typescript, APIs
 
