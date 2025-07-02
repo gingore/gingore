@@ -2,5 +2,5 @@
 
 - languages: html, css, js, php, mysql
 - tools: figma, procreate
-- learning: react, typescript, APIs
+- learning: react, typescript, tailwind, APIs
 
